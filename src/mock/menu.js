@@ -5,8 +5,8 @@ let database = [
   {
     id: '1',
     icon: 'dashboard',
-    name: 'Dashboard',
-    route: '/dashboard',
+    name: 'Analysis',
+    route: '/analysis',
   },
   {
     id: '2',
