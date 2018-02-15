@@ -20,15 +20,15 @@ export default modelExtend(model, {
   },
 
   effects: {
-    *fetch(_, { call, put }) {
-      const response = yield call(analysisService);
+    *fetch(payload = {}, { call, put }) {
+      const response = yield call(analysisService.query, payload);
       yield put({
         type: 'save',
         payload: response,
       });
     },
-    *fetchSalesData(_, { call, put }) {
-      const response = yield call(analysisService);
+    *fetchSalesData(payload = {}, { call, put }) {
+      const response = yield call(analysisService.query, payload);
       yield put({
         type: 'save',
         payload: {

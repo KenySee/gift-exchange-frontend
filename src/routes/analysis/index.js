@@ -55,7 +55,7 @@ export default class Analysis extends Component {
 
   componentDidMount() {
     this.props.dispatch({
-      type: 'chart/fetch',
+      type: 'analysis/fetch',
     });
   }
 
@@ -126,7 +126,7 @@ export default class Analysis extends Component {
       salesTypeDataOnline,
       salesTypeDataOffline,
     } = analysis;
-
+  console.log('analysis',analysis);
     const salesPieData =
       salesType === 'all'
         ? salesTypeData
