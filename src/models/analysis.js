@@ -17,6 +17,7 @@ export default modelExtend(model, {
     salesTypeDataOffline: [],
     radarData: [],
     loading: false,
+    initData:true
   },
 
   effects: {
@@ -24,7 +25,7 @@ export default modelExtend(model, {
       const response = yield call(analysisService.query, payload);
       yield put({
         type: 'save',
-        payload: response,
+        payload: {...response,initData:false},
       });
     },
     *fetchSalesData(payload = {}, { call, put }) {
@@ -33,6 +34,7 @@ export default modelExtend(model, {
         type: 'save',
         payload: {
           salesData: response.salesData,
+          initData: false
         },
       });
     },

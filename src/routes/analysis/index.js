@@ -44,7 +44,7 @@ for (let i = 0; i < 7; i += 1) {
 
 @connect(({ analysis, loading }) => ({
   analysis,
-  loading: loading.effects['chart/fetch'],
+  loading: loading.effects['analysis/fetch'],
 }))
 export default class Analysis extends Component {
   state = {
@@ -57,6 +57,11 @@ export default class Analysis extends Component {
     this.props.dispatch({
       type: 'analysis/fetch',
     });
+    setTimeout(()=>{
+      const event = document.createEvent('HTMLEvents');
+      event.initEvent('resize', true, false);
+      window.dispatchEvent(event);
+    },1000);
   }
 
   componentWillUnmount() {
@@ -125,8 +130,9 @@ export default class Analysis extends Component {
       salesTypeData,
       salesTypeDataOnline,
       salesTypeDataOffline,
+      initData
     } = analysis;
-  console.log('analysis',analysis);
+    if(initData) return null;
     const salesPieData =
       salesType === 'all'
         ? salesTypeData

@@ -3,6 +3,7 @@ import dva from 'dva'
 import createLoading from 'dva-loading'
 import createHistory from 'history/createBrowserHistory'
 import 'babel-polyfill'
+import './rollbar';
 
 // 1. Initialize
 const app = dva({
@@ -14,7 +15,7 @@ const app = dva({
     message.error(error.message)
   },
 })
-
+// app.use(createLoading());
 // 2. Model
 app.model(require('./models/app'))
 

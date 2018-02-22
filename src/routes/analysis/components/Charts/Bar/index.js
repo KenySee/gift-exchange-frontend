@@ -22,6 +22,7 @@ class Bar extends Component {
   @Bind()
   @Debounce(400)
   resize() {
+    console.log('Bar......')
     if (!this.node) {
       return;
     }

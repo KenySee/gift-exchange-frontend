@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { LocaleProvider, Spin } from 'antd';
 import { Switch, Route, Redirect, routerRedux } from 'dva/router'
 import dynamic from 'dva/dynamic'
 import App from 'routes/app'
-
 const { ConnectedRouter } = routerRedux
 
 const Routers = function ({ history, app }) {
