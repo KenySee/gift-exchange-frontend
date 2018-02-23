@@ -148,6 +148,7 @@ const getTimeDistance =  (type) => {
 module.exports = {
   config,
   request,
+  fetch,
   color,
   classnames,
   queryURL,

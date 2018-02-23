@@ -13,6 +13,7 @@ const fetch = (options) => {
     data,
     fetchType,
     url,
+    config
   } = options
 
   const cloneData = lodash.cloneDeep(data)
@@ -55,19 +56,15 @@ const fetch = (options) => {
 
   switch (method.toLowerCase()) {
     case 'get':
-      return axios.get(url, {
-        params: cloneData,
-      })
+      return axios.get(url, qs.stringify(cloneData))
     case 'delete':
-      return axios.delete(url, {
-        data: cloneData,
-      })
+      return axios.delete(url, qs.stringify(cloneData))
     case 'post':
-      return axios.post(url, cloneData)
+      return axios.post(url, qs.stringify(cloneData))
     case 'put':
-      return axios.put(url, cloneData)
+      return axios.put(url, qs.stringify(cloneData))
     case 'patch':
-      return axios.patch(url, cloneData)
+      return axios.patch(url, qs.stringify(cloneData))
     default:
       return axios(options)
   }
