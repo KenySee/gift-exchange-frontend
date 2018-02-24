@@ -14,7 +14,7 @@ export default {
   outputPath: `./dist/${version}`,
   // 接口代理示例
   proxy: {
-    "/api/v1/weather": {
+    "http://localhost:3200/mock/v1/analysis": {
       "target": "https://api.seniverse.com/",
       "changeOrigin": true,
       "pathRewrite": { "^/api/v1/weather": "/v3/weather" }

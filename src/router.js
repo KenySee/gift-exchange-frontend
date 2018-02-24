@@ -13,9 +13,21 @@ const Routers = function ({ history, app }) {
   })
   const routes = [
     {
-      path: '/dashboard',
-      models: () => [import('./models/dashboard')],
-      component: () => import('./routes/dashboard/'),
+      path: '/system/menu',
+      models: () => [import('./models/analysis')],
+      component: () => import('./routes/analysis/'),
+    },{
+      path: '/system/user',
+      models: () => [import('./models/analysis')],
+      component: () => import('./routes/analysis/'),
+    },{
+      path: '/system/role',
+      models: () => [import('./models/analysis')],
+      component: () => import('./routes/analysis/'),
+    },{
+      path: '/bussiness/order',
+      models: () => [import('./models/analysis')],
+      component: () => import('./routes/analysis/'),
     },{
       path: '/login',
       models: () => [import('./bussiness/core/login/model')],

@@ -11,7 +11,7 @@ const Bread = ({ menu, location }) => {
   let pathArray = []
   let current
   for (let index in menu) {
-    if (menu[index].route && pathToRegexp(menu[index].route).exec(location.pathname)) {
+    if (menu[index].path && pathToRegexp(menu[index].path).exec(location.pathname)) {
       current = menu[index]
       break
     }
@@ -19,18 +19,18 @@ const Bread = ({ menu, location }) => {
 
   const getPathArray = (item) => {
     pathArray.unshift(item)
-    if (item.bpid) {
-      getPathArray(queryArray(menu, item.bpid, 'id'))
+    if (item.parentId != -1) {
+      getPathArray(queryArray(menu, item.parentId, 'id'))
     }
   }
 
   let paramMap = {}
   if (!current) {
-    pathArray.push(menu[0] || {
-      id: 1,
-      icon: 'laptop',
-      name: 'Dashboard',
-    })
+    // pathArray.push(menu[0] || {
+    //   id: 1,
+    //   icon: 'laptop',
+    //   name: 'Dashboard',
+    // })
     pathArray.push({
       id: 404,
       name: 'Not Found',
@@ -39,7 +39,7 @@ const Bread = ({ menu, location }) => {
     getPathArray(current)
 
     let keys = []
-    let values = pathToRegexp(current.route, keys).exec(location.pathname.replace('#', ''))
+    let values = pathToRegexp(current.path, keys).exec(location.pathname.replace('#', ''))
     if (keys.length) {
       keys.forEach((currentValue, index) => {
         if (typeof currentValue.name !== 'string') {
@@ -60,7 +60,7 @@ const Bread = ({ menu, location }) => {
     return (
       <Breadcrumb.Item key={key}>
         {((pathArray.length - 1) !== key)
-          ? <Link to={pathToRegexp.compile(item.route || '')(paramMap) || '#'}>
+          ? <Link to={pathToRegexp.compile(item.path || '')(paramMap) || '#'}>
             {content}
           </Link>
           : content}

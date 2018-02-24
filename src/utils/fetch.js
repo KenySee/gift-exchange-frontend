@@ -1,5 +1,4 @@
 import { request } from 'utils'
-
 export async function FetchGet(url,params) {
   return request({
     url: url,

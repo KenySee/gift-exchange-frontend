@@ -3,6 +3,7 @@ import classnames from 'classnames'
 import lodash from 'lodash'
 import config from './config'
 import request from './request'
+import mockajax from './mockajax'
 import { color } from './theme'
 import moment from 'moment';
 // 连字符转驼峰
@@ -150,6 +151,7 @@ module.exports = {
   request,
   fetch,
   color,
+  mockajax,
   classnames,
   queryURL,
   queryArray,

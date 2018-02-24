@@ -1,5 +1,5 @@
-const APIV1 = '/mock/v1'
-const APIV2 = '/mock/v2'
+const APIV1 = '/api/v1'
+const APIV2 = '/api/v2'
 module.exports = {
   userLogin: `${APIV1}/user/login`,
   userLogout: `${APIV1}/user/logout`,

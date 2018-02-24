@@ -5,17 +5,18 @@ import { Link } from 'react-router-dom'
 import { arrayToTree, queryArray } from 'utils'
 import pathToRegexp from 'path-to-regexp'
 
-const Menus = ({ siderFold, darkTheme, navOpenKeys, changeOpenKeys, menu, location }) => {
+const Menus = ({ siderFold, darkTheme, navOpenKeys, changeOpenKeys, menu, user, location }) => {
   // 生成树状
-  const menuTree = arrayToTree(menu.filter(_ => _.mpid !== '-1'), 'id', 'mpid')
+  const { menuList } = user
+  const menuTree = arrayToTree(menu, 'id', 'parentId')
   const levelMap = {}
 
   // 递归生成菜单
   const getMenus = (menuTreeN, siderFoldN) => {
-    return menuTreeN.map((item) => {
+    return menuTreeN.filter(item => menuList.filter(menu => (item.id & menu.id) == item.id).length>0).sort((m,n) => m.serialNum-n.serialNum).map((item) => {
       if (item.children) {
-        if (item.mpid) {
-          levelMap[item.id] = item.mpid
+        if (item.parentId != -1) {
+          levelMap[item.id] = item.parentId
         }
         return (
           <Menu.SubMenu
@@ -31,7 +32,7 @@ const Menus = ({ siderFold, darkTheme, navOpenKeys, changeOpenKeys, menu, locati
       }
       return (
         <Menu.Item key={item.id}>
-          <Link to={item.route || '#'}>
+          <Link to={item.path || '#'}>
             {item.icon && <Icon type={item.icon} />}
             {(!siderFoldN || !menuTree.includes(item)) && item.name}
           </Link>
@@ -82,7 +83,7 @@ const Menus = ({ siderFold, darkTheme, navOpenKeys, changeOpenKeys, menu, locati
   let currentMenu
   let defaultSelectedKeys
   for (let item of menu) {
-    if (item.route && pathToRegexp(item.route).exec(location.pathname)) {
+    if (item.path && pathToRegexp(item.path).exec(location.pathname)) {
       currentMenu = item
       break
     }
@@ -99,7 +100,7 @@ const Menus = ({ siderFold, darkTheme, navOpenKeys, changeOpenKeys, menu, locati
     return result
   }
   if (currentMenu) {
-    defaultSelectedKeys = getPathArray(menu, currentMenu, 'mpid', 'id')
+    defaultSelectedKeys = getPathArray(menu, currentMenu, 'parentId', 'id')
   }
 
   if (!defaultSelectedKeys) {

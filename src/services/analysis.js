@@ -1,12 +1,9 @@
-import { request, config } from 'utils'
-
+import { request, config, mockajax } from 'utils'
 const { api } = config
 const { analysis } = api
 
 export async function query (params) {
-  return request({
-    url: analysis,
-    method: 'get',
-    data: params,
+  return mockajax(analysis,{
+    method: 'get'
   })
 }

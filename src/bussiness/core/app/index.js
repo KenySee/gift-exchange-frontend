@@ -22,13 +22,14 @@ const App = ({
                children, dispatch, app, loading, location,
              }) => {
   const {
-    user, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys, menu, permissions,
+    user, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys, menu,
   } = app
   let { pathname } = location
+  let { menuList } = user
   pathname = pathname.startsWith('/') ? pathname : `/${pathname}`
   const { iconFontJS, iconFontCSS, logo } = config
-  const current = menu.filter(item => pathToRegexp(item.route || '').exec(pathname))
-  const hasPermission = current.length ? permissions.visit.includes(current[0].id) : false
+  const current = menuList.filter(item => pathToRegexp(item.path || '').exec(pathname))
+  const hasPermission = current.length > 0;
   const { href } = window.location
 
   if (lastHref !== href) {
@@ -63,6 +64,7 @@ const App = ({
 
   const siderProps = {
     menu,
+    user,
     location,
     siderFold,
     darkTheme,

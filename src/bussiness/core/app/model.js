@@ -10,11 +10,11 @@ const { prefix,apiPrefix,baseURL } = config
 export default {
   namespace: 'app',
   state: {
-    user: {},
+    user: {menuList:[]},
     menu: [],
     menuPopoverVisible: false,
     siderFold: window.localStorage.getItem(`${prefix}siderFold`) === 'true',
-    darkTheme: window.localStorage.getItem(`${prefix}darkTheme`) !== 'true',
+    darkTheme: true,
     isNavbar: document.body.clientWidth < 769,
     navOpenKeys: JSON.parse(window.localStorage.getItem(`${prefix}navOpenKeys`)) || [],
     token: window.localStorage.getItem(`${prefix}token`),
@@ -23,6 +23,7 @@ export default {
   },
   reducers: {
     fetchEnd(state, { payload }) {
+      console.log('fetchEnd',{ ...state, ...payload});
       return { ...state, ...payload};
     },
     updateToken (state, { payload }) {
@@ -73,7 +74,6 @@ export default {
       if (userData.success) {
         axios.defaults.headers.common['token'] = `Bearer ${token}`;
         const menuData = yield call(FetchGet,'/api/menus');
-        console.log('menuData',menuData);
         if(menuData.success){
           yield put({
             type: 'fetchEnd',
@@ -85,7 +85,7 @@ export default {
         }
         if (location.pathname === '/login') {
           yield put(routerRedux.push({
-            pathname: '/dashboard',
+            pathname: '/system/menu',
           }))
         }
       }

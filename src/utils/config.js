@@ -1,5 +1,5 @@
-const APIV1 = '/mock/v1'
-const APIV2 = '/mock/v2'
+const APIV1 = '/api/v1'
+const APIV2 = '/api/v2'
 import apiConfig from './api'
 module.exports = {
   name: 'AntD Admin',
@@ -11,7 +11,7 @@ module.exports = {
   CORS: [],
   baseURL:'http://localhost:3200',
   openPages: ['/login'],
-  apiPrefix: '/mock/v1',
+  apiPrefix: '/api/v1',
   APIV1,
   APIV2,
   api: apiConfig
