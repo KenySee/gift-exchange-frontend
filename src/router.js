@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { LocaleProvider, Spin } from 'antd';
 import { Switch, Route, Redirect, routerRedux } from 'dva/router'
 import dynamic from 'dva/dynamic'
 import App from './bussiness/core/app'
@@ -13,21 +12,9 @@ const Routers = function ({ history, app }) {
   })
   const routes = [
     {
-      path: '/system/menu',
-      models: () => [import('./models/analysis')],
-      component: () => import('./routes/analysis/'),
-    },{
-      path: '/system/user',
-      models: () => [import('./models/analysis')],
-      component: () => import('./routes/analysis/'),
-    },{
-      path: '/system/role',
-      models: () => [import('./models/analysis')],
-      component: () => import('./routes/analysis/'),
-    },{
-      path: '/bussiness/order',
-      models: () => [import('./models/analysis')],
-      component: () => import('./routes/analysis/'),
+      path: '/dashboard',
+      models: () => [import('./bussiness/core/dashboard/model')],
+      component: () => import('./bussiness/core/dashboard'),
     },{
       path: '/login',
       models: () => [import('./bussiness/core/login/model')],
@@ -39,7 +26,7 @@ const Routers = function ({ history, app }) {
     <ConnectedRouter history={history}>
       <App>
         <Switch>
-          <Route exact path="/" render={() => (<Redirect to="/analysis" />)} />
+          <Route exact path="/" render={() => (<Redirect to="/dashboard" />)} />
           {
             routes.map(({ path, ...dynamics }, key) => (
               <Route key={key}

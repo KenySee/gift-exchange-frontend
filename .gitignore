@@ -4,7 +4,6 @@ yarn.lock
 npm-debug.log
 # ide
 .idea
-
 # Mac General
 .DS_Store
 .AppleDouble

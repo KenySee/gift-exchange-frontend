@@ -23,7 +23,6 @@ export default {
   },
   reducers: {
     fetchEnd(state, { payload }) {
-      console.log('fetchEnd',{ ...state, ...payload});
       return { ...state, ...payload};
     },
     updateToken (state, { payload }) {
@@ -85,7 +84,7 @@ export default {
         }
         if (location.pathname === '/login') {
           yield put(routerRedux.push({
-            pathname: '/system/menu',
+            pathname: '/',
           }))
         }
       }
@@ -99,12 +98,8 @@ export default {
       }
     },
     * logout ({payload}, { call, put }) {
-      const data = yield call(logout, parse(payload))
-      if (data.success) {
-        yield put({ type: 'query' })
-      } else {
-        throw (data)
-      }
+      yield put({ type: 'updateToken', payload: null })
+      yield put({ type: 'query' })
     },
     * changeNavbar (action, { put, select }) {
       const { app } = yield (select(_ => _))
@@ -118,7 +113,7 @@ export default {
     setupHistory ({ dispatch, history }) {
       history.listen((location) => {
         dispatch({
-          type: 'updateState',
+          type: 'fetchEnd',
           payload: {
             locationPathname: location.pathname,
             locationQuery: queryString.parse(location.search),
