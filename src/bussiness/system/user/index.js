@@ -86,7 +86,7 @@ export default class UserList extends Component {
       });
     }
     return (
-      <Modal title={`${editing ? '编辑' : '添加'}用户`} visible={modalVisible} onOk={handleModalOK} onCancel={() => this.setProps({modalVisible: false})}>
+      <Modal title={`${editing ? '编辑' : '添加'}用户`} okText={'确定'} cancelText={'取消'} visible={modalVisible} onOk={handleModalOK} onCancel={() => this.setProps({modalVisible: false})}>
         <Form.Item labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="ID">
           {form.getFieldDecorator('id')(<Input disabled={true}/>)}
         </Form.Item>

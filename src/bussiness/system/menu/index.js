@@ -59,7 +59,7 @@ export default class MenuList extends Component {
       {title:'序号',dataIndex:'serialNum'},
       {title:'图标',dataIndex:'icon'},
       {title:'名称',dataIndex:'name'},
-      {title:'路径',dataIndex:'path'},
+      {title:'路径',dataIndex:'path',className:styles.columnLeft},
       {
         title: '操作',
         render: (text, record, index) => (
@@ -86,7 +86,7 @@ export default class MenuList extends Component {
       });
     }
     return (
-      <Modal title={`${editing ? '编辑' : '添加'}菜单`} visible={modalVisible} onOk={handleModalOK} onCancel={() => this.setProps({modalVisible: false})}>
+      <Modal title={`${editing ? '编辑' : '添加'}菜单`} okText={'确定'} cancelText={'取消'} visible={modalVisible} onOk={handleModalOK} onCancel={() => this.setProps({modalVisible: false})}>
         <Form.Item labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="ID">
           {form.getFieldDecorator('id')(<Input disabled={true}/>)}
         </Form.Item>
