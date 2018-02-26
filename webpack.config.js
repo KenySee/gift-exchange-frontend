@@ -46,7 +46,7 @@ module.exports = (webpackConfig, env) => {
   // Alias
   webpackConfig.resolve.alias = {
     components: `${__dirname}/src/components`,
-    antpro: `${__dirname}/src/bussiness/antpro`,
+    antpro: `${__dirname}/src/antpro`,
     utils: `${__dirname}/src/utils`,
     config: `${__dirname}/src/utils/config`,
     enums: `${__dirname}/src/utils/enums`,

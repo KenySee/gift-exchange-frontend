@@ -7,8 +7,8 @@ export default {
       list: [],
       pagination: {},
     },
-    entity:{},
     tree:[],
+    editing:false,
     modalVisible: false,
     defaultSerialNum:1,
     parentId:-1
@@ -77,12 +77,6 @@ export default {
     * loadOne ({payload}, { put, call, select }) {
       const data = yield call(FetchGet, `/api/menus/${payload.id}`);
       payload.callback && payload.callback(data.result);
-      yield put({
-        type: 'fetchEnd',
-        payload: {
-          modalVisible: true
-        }
-      });
     },
     * deleteOne ({payload}, { put, call, select }) {
       const menu = yield select(_ => _.menu);

@@ -7,17 +7,17 @@ import { Row, Col, Tree, Card, Layout, Form, Breadcrumb,Input, Select, Icon, But
 const TreeNode = Tree.TreeNode;
 const confirm = Modal.confirm;
 const { Header, Content, Sider } = Layout;
-import styles from './index.less';
+import styles from "../../utils.less";
 
 @autoHeight()
 @connect(({ menu, loading }) => ({
   menu,
-  loading: loading.effects['menu/loadChild'],
+  loading: loading.effects['menu/loadTree'],
 }))
 @Form.create()
 export default class MenuList extends Component {
-  state = {
-    formValues: {},
+  componentDidMount() {
+    this.props.dispatch({type: 'menu/loadTree'});
   }
   setProps = (payload) => {
     this.props.dispatch({type:'menu/fetchEnd',payload});
@@ -25,7 +25,7 @@ export default class MenuList extends Component {
   onAddButton = () => {
     const { form } = this.props;
     form.resetFields();
-    this.setProps({modalVisible: true});
+    this.setProps({modalVisible: true,editing:false});
   }
   buildColumns = () => {
     const { form,dispatch } = this.props;
@@ -38,6 +38,7 @@ export default class MenuList extends Component {
               path:data.path,
               serialNum:data.serialNum
             });
+            this.setProps({modalVisible: true,editing:true});
       }}})
     }
     const removeClick = (record) => {
@@ -72,21 +73,21 @@ export default class MenuList extends Component {
     ]
   }
   buildForm = (props) => {
-    const { form, menu:{defaultSerialNum,modalVisible} } = this.props;
+    const { form, menu:{defaultSerialNum,modalVisible,editing} } = this.props;
     const handleModalOK = () => {
       form.validateFields((err, fieldsValue) => {
         if (err) return;
         form.resetFields();
         this.props.dispatch({
-          type: `menu/${fieldsValue.id ? 'updateOne' : 'addOne'}`,
+          type: `menu/${editing ? 'updateOne' : 'addOne'}`,
           payload: fieldsValue,
         });
-        message.success(`${fieldsValue.id ? '更新' : '添加'}成功`);
+        message.success(`${editing ? '更新' : '添加'}成功`);
         this.setProps({modalVisible: false});
       });
     }
     return (
-      <Modal title="新建菜单" visible={modalVisible} onOk={handleModalOK} onCancel={() => this.setProps({modalVisible: false})}>
+      <Modal title={`${editing ? '编辑' : '添加'}菜单`} visible={modalVisible} onOk={handleModalOK} onCancel={() => this.setProps({modalVisible: false})}>
         <Form.Item labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="ID">
           {form.getFieldDecorator('id')(<Input disabled={true}/>)}
         </Form.Item>
@@ -105,12 +106,8 @@ export default class MenuList extends Component {
       </Modal>
     )
   }
-  componentDidMount() {
-    this.props.dispatch({type: 'menu/loadTree'});
-  }
   handlePaginationChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
-    const { formValues } = this.state;
     const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
       const newObj = { ...obj };
@@ -121,7 +118,6 @@ export default class MenuList extends Component {
     const params = {
       page: pagination.current,
       limit: pagination.pageSize,
-      ...formValues,
       ...filters,
     };
     if (sorter.field) {
@@ -179,7 +175,7 @@ export default class MenuList extends Component {
             <div className={styles.tableList}>
               <div className={styles.tableListOperator}>
                 <Button icon="plus" type="primary" onClick={this.onAddButton}>
-                  新建
+                  添加
                 </Button>
               </div>
               <StandardTable
