@@ -1,4 +1,4 @@
-import { FetchGet,FetchPost,FetchDelete } from 'utils/fetch'
+import { FetchGet,FetchPost,FetchPatch,FetchDelete } from 'utils/fetch'
 
 export default {
   namespace: 'menu',
@@ -15,28 +15,24 @@ export default {
   },
   reducers: {
     fetchEnd(state, {payload}) {
-      console.log('fetchEnd',payload);
       return {
         ...state,
-        ...payload,
+        ...payload
       }
     }
   },
   effects: {
-    * fetch ({payload}, { put, call, select }){
-      yield put({
-        type: 'fetchEnd',
-        payload: {
-          ...payload
-        }
-      });
-    },
     * loadTree ({payload}, { put, call, select }) {
       const menuData = yield call(FetchGet,'/api/menus');
+      const listData = menuData.result.filter(item => item.parentId==-1);
       yield put({
         type: 'fetchEnd',
         payload: {
-          tree: menuData.result
+          tree: menuData.result,
+          data:{
+            list: [].concat(listData),
+            pagination:{current:1,pageSize:10,total:listData.length}
+          }
         }
       });
     },
@@ -49,7 +45,32 @@ export default {
           data: {
             list: menu.data.list.concat(data.result),
             pagination: menu.data.pagination
-          }
+          },
+          tree: menu.tree.concat(data.result)
+        }
+      });
+    },
+    * updateOne ({payload}, { put, call, select }) {
+      const menu = yield select(_ => _.menu);
+      const data = yield call(FetchPatch, `/api/menus`,payload);
+      yield put({
+        type: 'fetchEnd',
+        payload: {
+          data: {
+            list: [].concat(menu.data.list.map(item => {
+              if(item.id == payload.id){
+                return data.result
+              }
+              return item;
+            })),
+            pagination: menu.data.pagination
+          },
+          tree: [].concat(menu.tree.map(item => {
+            if(item.id == payload.id){
+              return data.result
+            }
+            return item;
+          }))
         }
       });
     },
@@ -72,7 +93,8 @@ export default {
           data: {
             list: [].concat(menu.data.list.filter( item => payload.id != item.id )),
             pagination: menu.data.pagination
-          }
+          },
+          tree: [].concat(menu.tree.filter( item => payload.id != item.id ))
         }
       });
     },

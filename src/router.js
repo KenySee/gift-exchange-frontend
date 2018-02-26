@@ -16,7 +16,7 @@ const Routers = function ({ history, app }) {
       models: () => [import('./bussiness/core/dashboard/model')],
       component: () => import('./bussiness/core/dashboard'),
     },{
-      path: '/bussiness/menu',
+      path: '/system/menu',
       models: () => [import('./bussiness/core/menu/model')],
       component: () => import('./bussiness/core/menu'),
     },{

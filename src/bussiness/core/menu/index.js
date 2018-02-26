@@ -5,6 +5,7 @@ import StandardTable from 'antpro/StandardTable';
 import { arrayToTree } from 'utils'
 import { Row, Col, Tree, Card, Layout, Form, Breadcrumb,Input, Select, Icon, Button, Dropdown, Menu, InputNumber, DatePicker, Modal, message, Badge, Divider } from 'antd';
 const TreeNode = Tree.TreeNode;
+const confirm = Modal.confirm;
 const { Header, Content, Sider } = Layout;
 import styles from './index.less';
 
@@ -40,7 +41,17 @@ export default class MenuList extends Component {
       }}})
     }
     const removeClick = (record) => {
-      dispatch({type:'menu/deleteOne',payload:{id:record.id}})
+      Modal.confirm({
+        title: '删除后无法恢复,你确定要删除码?',
+        content: '',
+        okText: '确定',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk() {
+          dispatch({type:'menu/deleteOne',payload:{id:record.id}})
+        },
+        onCancel() {},
+      })
     }
     return [
       {title:'ID',dataIndex:'id'},
@@ -67,16 +78,16 @@ export default class MenuList extends Component {
         if (err) return;
         form.resetFields();
         this.props.dispatch({
-          type: 'menu/addOne',
+          type: `menu/${fieldsValue.id ? 'updateOne' : 'addOne'}`,
           payload: fieldsValue,
         });
-        message.success('添加成功');
+        message.success(`${fieldsValue.id ? '更新' : '添加'}成功`);
         this.setProps({modalVisible: false});
       });
     }
     return (
       <Modal title="新建菜单" visible={modalVisible} onOk={handleModalOK} onCancel={() => this.setProps({modalVisible: false})}>
-        <Form.Item labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="图标">
+        <Form.Item labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="ID">
           {form.getFieldDecorator('id')(<Input disabled={true}/>)}
         </Form.Item>
         <Form.Item labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="图标">
@@ -121,7 +132,6 @@ export default class MenuList extends Component {
       payload: params,
     });
   }
-
   buildTree = ({data}) => {
     const menuTree = arrayToTree(data, 'id', 'parentId')
     const onSelect = (selectedKeys, info) => {
@@ -165,7 +175,7 @@ export default class MenuList extends Component {
           </Card>
         </Sider>
         <Layout style={{ paddingLeft: 24 }}>
-          <Card bordered={false}>
+          <Card bordered={false} style={{ background: '#fff',height: height }}>
             <div className={styles.tableList}>
               <div className={styles.tableListOperator}>
                 <Button icon="plus" type="primary" onClick={this.onAddButton}>
