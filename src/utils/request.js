@@ -92,6 +92,9 @@ export default function request (options) {
         list: data,
       }
     }
+    if(data.success === false){
+      return Promise.reject({ success: false, statusCode:-1, message: data.message })
+    }
     return Promise.resolve({
       success: true,
       message: statusText,

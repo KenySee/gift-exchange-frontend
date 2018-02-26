@@ -12,7 +12,7 @@ import styles from "../../utils.less";
 @autoHeight()
 @connect(({ menu, loading }) => ({
   menu,
-  loading: loading.effects['menu/loadTree'],
+  loading: loading.effects['menu/loadChild'],
 }))
 @Form.create()
 export default class MenuList extends Component {
@@ -82,7 +82,6 @@ export default class MenuList extends Component {
           type: `menu/${editing ? 'updateOne' : 'addOne'}`,
           payload: fieldsValue,
         });
-        message.success(`${editing ? '更新' : '添加'}成功`);
         this.setProps({modalVisible: false});
       });
     }

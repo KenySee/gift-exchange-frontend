@@ -12,7 +12,7 @@ import styles from "../../utils.less";
 @autoHeight()
 @connect(({ depot, loading }) => ({
   depot,
-  loading: loading.effects['depot/loadTree'],
+  loading: loading.effects['depot/loadChild'],
 }))
 @Form.create()
 export default class DepotList extends Component {
@@ -80,7 +80,6 @@ export default class DepotList extends Component {
           type: `depot/${editing ? 'updateOne' : 'addOne'}`,
           payload: fieldsValue,
         });
-        message.success(`${editing ? '更新' : '添加'}成功`);
         this.setProps({modalVisible: false});
       });
     }

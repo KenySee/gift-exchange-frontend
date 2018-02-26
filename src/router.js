@@ -20,6 +20,10 @@ const Routers = function ({ history, app }) {
       models: () => [import('./bussiness/system/menu/model')],
       component: () => import('./bussiness/system/menu'),
     },{
+      path: '/system/user',
+      models: () => [import('./bussiness/system/user/model')],
+      component: () => import('./bussiness/system/user'),
+    },{
       path: '/system/depot',
       models: () => [import('./bussiness/system/depot/model')],
       component: () => import('./bussiness/system/depot'),
