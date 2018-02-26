@@ -16,6 +16,10 @@ const Routers = function ({ history, app }) {
       models: () => [import('./bussiness/core/dashboard/model')],
       component: () => import('./bussiness/core/dashboard'),
     },{
+      path: '/bussiness/menu',
+      models: () => [import('./bussiness/core/menu/model')],
+      component: () => import('./bussiness/core/menu'),
+    },{
       path: '/login',
       models: () => [import('./bussiness/core/login/model')],
       component: () => import('./bussiness/core/login'),

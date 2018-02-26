@@ -26,7 +26,7 @@ class StandardTable extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     // clean state
-    if (nextProps.selectedRows.length === 0) {
+    if (nextProps.selectedRows && nextProps.selectedRows.length === 0) {
       const needTotalList = initTotalList(nextProps.columns);
       this.setState({
         selectedRowKeys: [],
@@ -63,7 +63,7 @@ class StandardTable extends PureComponent {
 
   render() {
     const { selectedRowKeys, needTotalList } = this.state;
-    const { data: { list, pagination }, loading, columns } = this.props;
+    const { data: { list, pagination }, loading, columns,onSelectRow } = this.props;
 
     const paginationProps = {
       showSizeChanger: true,
@@ -71,18 +71,18 @@ class StandardTable extends PureComponent {
       ...pagination,
     };
 
-    const rowSelection = {
+    const rowSelection = onSelectRow ? {
       selectedRowKeys,
       onChange: this.handleRowSelectChange,
       getCheckboxProps: record => ({
         disabled: record.disabled,
       }),
-    };
+    } : null;
 
     return (
       <div className={styles.standardTable}>
         <div className={styles.tableAlert}>
-          <Alert
+          { onSelectRow ? <Alert
             message={(
               <Fragment>
                 已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}</a> 项&nbsp;&nbsp;
@@ -101,7 +101,7 @@ class StandardTable extends PureComponent {
             )}
             type="info"
             showIcon
-          />
+          />: null }
         </div>
         <Table
           loading={loading}

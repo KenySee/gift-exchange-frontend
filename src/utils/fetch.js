@@ -1,9 +1,9 @@
 import { request } from 'utils'
+import { stringify } from 'qs';
 export async function FetchGet(url,params) {
   return request({
-    url: url,
-    method: 'get',
-    data: params,
+    url: params ? `${url}?${stringify(params)}` : url,
+    method: 'get'
   })
 }
 export async function FetchPost(url,params) {
