@@ -41,7 +41,6 @@ export default {
   effects: {
     *fetch(payload = {}, { call, put }) {
       const response = yield call(mockAjax,`/dashboard`, {method: 'get'});
-      console.log('dashboard/effects',response);
       yield put({
         type: 'fetchEnd',
         payload: {...response,initData:false},

@@ -54,9 +54,8 @@ export default class Dashboard extends Component {
   };
 
   componentDidMount() {
-    this.props.dispatch({
-      type: 'dashboard/fetch',
-    });
+    this.props.dispatch({type: 'dashboard/fetch'});
+    this.props.dispatch({type: 'app/fetchNotices'});
     setTimeout(()=>{
       const event = document.createEvent('HTMLEvents');
       event.initEvent('resize', true, false);

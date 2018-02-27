@@ -8,21 +8,22 @@ import { BackTop, Layout } from 'antd'
 import { classnames, config } from 'utils'
 import { Helmet } from 'react-helmet'
 import { withRouter } from 'dva/router'
+import GlobalHeader from 'antpro/GlobalHeader';
 import Error from '../error'
 import '../../../themes/index.less'
 import './index.less'
 
-const { Content, Footer, Sider } = Layout
-const { Header, Bread, styles } = MyLayout
+const { Content, Header, Footer, Sider } = Layout
+const { Bread, styles } = MyLayout
 const { prefix, openPages } = config
 
 let lastHref
 
 const App = ({
-               children, dispatch, app, loading, location,
+               children, dispatch, app, fetchingNotices, loading, location,
              }) => {
   const {
-    user, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys, menu,
+    user, notices, collapsed, siderFold, darkTheme, isNavbar, menuPopoverVisible, navOpenKeys, menu,
   } = app
   let { pathname } = location
   let { menuList } = user
@@ -89,7 +90,35 @@ const App = ({
       {children}
     </div>)
   }
-
+  const handleMenuCollapse = (collapsed) => {
+    dispatch({
+      type: 'app/changeLayoutCollapsed',
+      payload: collapsed,
+    });
+  }
+  const handleNoticeClear = (type) => {
+    dispatch({
+      type: 'app/clearNotices',
+      payload: type,
+    });
+  }
+  const handleMenuClick = ({ key }) => {
+    if (key === 'triggerError') {
+      return;
+    }
+    if (key === 'logout') {
+      dispatch({
+        type: 'app/logout',
+      });
+    }
+  }
+  const handleNoticeVisibleChange = (visible) => {
+    if (visible) {
+      dispatch({
+        type: 'app/fetchNotices',
+      });
+    }
+  }
   return (
     <div>
       <Loader fullScreen spinning={loading.effects['app/query']} />
@@ -111,7 +140,20 @@ const App = ({
         </Sider>}
         <Layout style={{ height: '100vh', overflow: 'scroll' }} id="mainContainer">
           <BackTop target={() => document.getElementById('mainContainer')} />
-          <Header {...headerProps} />
+          <Header style={{ padding: 0 }}>
+            <GlobalHeader
+              logo={logo}
+              currentUser={user}
+              fetchingNotices={fetchingNotices}
+              notices={notices}
+              collapsed={collapsed}
+              isMobile={false}
+              onNoticeClear={handleNoticeClear}
+              onCollapse={handleMenuCollapse}
+              onMenuClick={handleMenuClick}
+              onNoticeVisibleChange={handleNoticeVisibleChange}
+            />
+          </Header>
           <Content>
             <Bread {...breadProps} />
             {hasPermission ? children : <Error />}
@@ -133,4 +175,4 @@ App.propTypes = {
   loading: PropTypes.object,
 }
 
-export default withRouter(connect(({ app, loading }) => ({ app, loading }))(App))
+export default withRouter(connect(({ app, loading }) => ({ app, loading,fetchingNotices: loading.effects['app/fetchNotices'] }))(App))

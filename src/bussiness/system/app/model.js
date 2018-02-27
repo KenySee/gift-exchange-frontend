@@ -5,13 +5,16 @@ import { EnumRoleType } from 'enums'
 import { FetchGet,FetchPost } from 'utils/fetch'
 import queryString from 'query-string'
 import axios from 'axios'
-const { prefix,apiPrefix,baseURL } = config
+import { mockAjax } from 'utils'
+const { prefix,baseURL } = config
 
 export default {
   namespace: 'app',
   state: {
     user: {menuList:[]},
     menu: [],
+    notices:[],
+    collapsed:false,
     menuPopoverVisible: false,
     siderFold: window.localStorage.getItem(`${prefix}siderFold`) === 'true',
     darkTheme: true,
@@ -63,6 +66,16 @@ export default {
         ...state,
         ...navOpenKeys,
       }
+    },
+    handleNotifyChange (state, { payload }) {
+      return {
+        ...state,
+        notices: payload,
+        user: {
+          ...state.user,
+          notifyCount: payload.length,
+        },
+      };
     }
   },
   effects: {
@@ -107,6 +120,13 @@ export default {
       if (isNavbar !== app.isNavbar) {
         yield put({ type: 'handleNavbar', payload: isNavbar })
       }
+    },
+    * fetchNotices ({payload}, { call, put }) {
+      const data = yield call(mockAjax,`/notices`, {method: 'get'});
+      yield put({
+        type: 'handleNotifyChange',
+        payload: data
+      })
     }
   },
   subscriptions: {
